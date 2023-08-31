@@ -1,7 +1,7 @@
 from SimpleCV import Image, Color
 import csv
 
-def findMA(path, file_name_without_extension):
+def segment_ma(path):
     eye = Image(path)
 
     (empty, eye_green, emptier) = eye.splitChannels(False)
@@ -12,8 +12,8 @@ def findMA(path, file_name_without_extension):
     eye_gray = eye_gray.smooth()
 
 
-    #Canny edge detection algorithm. t1 specifies the threshold value to begin an edge. t2 specifies the strength required
-    #build an edge off of a point found by T2.
+    # Canny edge detection algorithm. t1 specifies the threshold value to begin an edge. t2 specifies the strength required
+    # build an edge off of a point found by T2.
     eye_edges = eye_gray.edges(t1 = 70, t2=35)
 
 
@@ -100,25 +100,6 @@ def findMA(path, file_name_without_extension):
                     b.draw(color=Color.WHITE)
 
 
-        #Save different objects
-        #eye_final.save("Output1.png")
-        #masked_circle_image.applyLayers().save("Output2.png")
-
         eye_final = eye_final - masked_circle_image.applyLayers()
-    eye_example = eye_final + eye
 
-    # print("third time")
-    print(eye_final[100,200])
-    print(eye_final[200,300])
-    print(eye_final[400,600])
-
-    eye_example.save(file_name_without_extension+'_MAoverlay.tif')
-    print("overlay saved")
-    eye_final.save(file_name_without_extension+'_MA.tif')
-    print("MA saved")
-    # print("fourth time")
-    print(eye_final[140,140])
-    print(eye_final[180,180])
-    print(eye_final[350,350])
-    # print('lag gye')
     return eye_final

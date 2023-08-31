@@ -4,9 +4,9 @@ import os
 import csv
 
 
-def extract_bv(image):		
+def segment_bloodvessels(image):		
 	b,green_fundus,r = cv2.split(image)
-	clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))
+	clahe = cv2.createCLAHE(clipLimit=6.0, tileGridSize=(8,8))
 	contrast_enhanced_green_fundus = clahe.apply(green_fundus)
 
 	# applying alternate sequential filtering (3 times closing opening)
@@ -22,7 +22,7 @@ def extract_bv(image):
 	# removing very small contours through area parameter noise removal
 	ret,f6 = cv2.threshold(f5,15,255,cv2.THRESH_BINARY)	
 	mask = np.ones(f5.shape[:2], dtype="uint8") * 255	
-	im2, contours, hierarchy = cv2.findContours(f6.copy(),cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
+	contours, hierarchy = cv2.findContours(f6.copy(),cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)
 	for cnt in contours:
 		if cv2.contourArea(cnt) <= 200:
 			cv2.drawContours(mask, [cnt], -1, 0, -1)			
@@ -31,10 +31,10 @@ def extract_bv(image):
 	newfin = cv2.erode(fin, cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3)), iterations=1)	
 
 	# removing blobs of unwanted bigger chunks taking in consideration they are not straight lines like blood
-	#vessels and also in an interval of area
+	# vessels and also in an interval of area
 	fundus_eroded = cv2.bitwise_not(newfin)	
 	xmask = np.ones(image.shape[:2], dtype="uint8") * 255
-	x1, xcontours, xhierarchy = cv2.findContours(fundus_eroded.copy(),cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)	
+	xcontours, xhierarchy = cv2.findContours(fundus_eroded.copy(),cv2.RETR_LIST,cv2.CHAIN_APPROX_SIMPLE)	
 	for cnt in xcontours:
 		shape = "unidentified"
 		peri = cv2.arcLength(cnt, True)
