@@ -46,7 +46,7 @@ def load_set(folder, shuffle=False):
 #db_folder = drishti dataset folder
 #cdr = set it true to get the cdr values of 4 experts
 #train_data = setting it true gives training data and false gives testing data
-def extract_DRISHTI_GS_train(db_folder,cdr,train_data):
+def extract_DRISHTI_GS_train(db_folder,cdr,train_data = True):
 
     file_codes_all,exp1,exp2,exp3,exp4 = [], [], [], [], []
     if train_data:
@@ -226,7 +226,10 @@ def cdr(cup,disc,show_plot = False, roi = []):
                 
     cv2.ellipse(img,el_cup,(140,60,150),3)  #fitting ellipse with the largest area
     x,y,w,h = cv2.boundingRect(contours[index]) #fitting a rectangle on the ellipse to get the length of major axis
+    #print(w, h)
+    # CHANGE THIS LATER IF IT INCREASES THE ACCURACY
     cup_diameter = max(w,h) #major axis is the diameter
+    
 
     # morphological closing and opening operations
     R1 = cv2.morphologyEx(disc, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(2,2)), iterations = 1)
