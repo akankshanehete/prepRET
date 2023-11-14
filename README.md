@@ -1,1 +1,2 @@
 # prepRET
+An open source Python library for retinal image preprocessing, image segmentation, and diagnostic analysis of DR and glaucoma, built during my Summer 2023 internship at McSCert. Methods perform segmentation relevant to disease diagnosis; optic disc, optic cup, hard exudate, and blood vessel segmentation. The library contains a novel algorithm providing an estimate of CDR ratio for early detection of glaucoma in patient retinal fundus images.
